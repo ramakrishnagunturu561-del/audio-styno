@@ -2,7 +2,7 @@
 
 SecurAudio is a cutting-edge, feature-rich desktop application designed to securely embed and extract hidden messages within audio files. This project is built using Python, `customtkinter` for a modern dark-themed user interface, and incorporates advanced Machine Learning techniques for steganalysis.
 
-This project was developed by **Anonymous** as part of a **Cyber Security Internship**. It is designed to **Secure the Organizations in Real World from Cyber Frauds performed by Hackers**.
+This project was developed by **SHAIK ANEESA BEGUM** as part of a **Cyber Security Internship**. It is designed to **Secure the Organizations in Real World from Cyber Frauds performed by Hackers**.
 
 ## Features
 
@@ -69,5 +69,8 @@ python cli/main.py
 
 - **Project Name**: Audio Steganography using LSB
 - **Project Description**: Hiding Message with Encryption in Audio using LSB Algorithm
-- **Developed by**: Anonymous
+- **Project Start Date**: 01-5-2026
+- **Project End Date**: 30-5-2026
+- **Developed by**: SHAIK ANEESA BEGUM
+- **Roll Number**: ST#IS#8883
 - **Company**: Supraja Technologies

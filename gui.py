@@ -21,8 +21,6 @@ from tkinter import filedialog
 import customtkinter as ctk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import webbrowser
-import tempfile
 
 # Core Project Modules
 import encrypt
@@ -88,7 +86,7 @@ class AudioStegoApp(ctk.CTk):
         # 1. Sidebar Frame
         self.sidebar_frame = ctk.CTkFrame(self, width=220, corner_radius=0, fg_color=self.sidebar_color)
         self.sidebar_frame.grid(row=0, column=0, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(5, weight=1) # Expander
+        self.sidebar_frame.grid_rowconfigure(6, weight=1) # Expander
         
         # App Title & Icon
         self.app_logo = ctk.CTkLabel(
@@ -138,13 +136,13 @@ class AudioStegoApp(ctk.CTk):
             anchor="w", font=ctk.CTkFont(size=13, weight="bold"),
             command=lambda: self.select_tab("plots")
         )
-        self.btn_plots.grid(row=5, column=0, padx=12, pady=5, sticky="new")
+        self.btn_plots.grid(row=5, column=0, padx=12, pady=5, sticky="ew")
 
         self.btn_info = ctk.CTkButton(
             self.sidebar_frame, text="ℹ️ Project Info", height=40, corner_radius=8,
             fg_color="transparent", text_color=self.text_color, hover_color="#1E2030",
             anchor="w", font=ctk.CTkFont(size=13, weight="bold"),
-            command=self.show_project_info
+            command=lambda: self.select_tab("info")
         )
         self.btn_info.grid(row=6, column=0, padx=12, pady=5, sticky="new")
         
@@ -175,6 +173,7 @@ class AudioStegoApp(ctk.CTk):
         self.create_extract_frame()
         self.create_ml_frame()
         self.create_plots_frame()
+        self.create_info_frame()
         
     def create_hide_frame(self):
         self.frame_hide = ctk.CTkFrame(self.content_frame, fg_color="transparent")
@@ -604,6 +603,102 @@ class AudioStegoApp(ctk.CTk):
         )
         self.lbl_plot_placeholder.grid(row=0, column=0, sticky="nsew")
 
+    def create_info_frame(self):
+        self.frame_info = ctk.CTkFrame(self.content_frame, fg_color="transparent")
+        self.frame_info.grid_columnconfigure(0, weight=1)
+        self.frame_info.grid_rowconfigure(1, weight=1)
+        
+        # Header
+        header_frame = ctk.CTkFrame(self.frame_info, fg_color="transparent")
+        header_frame.grid(row=0, column=0, sticky="ew", pady=(0, 15))
+        header_frame.grid_columnconfigure(0, weight=1)
+        
+        lbl_title = ctk.CTkLabel(
+            header_frame, text="Project Information",
+            font=ctk.CTkFont(family="Outfit", size=24, weight="bold"), text_color="white"
+        )
+        lbl_title.grid(row=0, column=0, sticky="w")
+        
+        # Logo placeholder
+        logo_lbl = ctk.CTkLabel(
+            header_frame, text="SUPRAJA", font=ctk.CTkFont(size=14, weight="bold"),
+            text_color="#EF4444", width=60, height=60, corner_radius=30,
+            fg_color="white"
+        )
+        logo_lbl.grid(row=0, column=1, sticky="e")
+        
+        # Card
+        card = ctk.CTkScrollableFrame(self.frame_info, fg_color=self.card_color, corner_radius=12)
+        card.grid(row=1, column=0, sticky="nsew")
+        card.grid_columnconfigure(0, weight=1)
+        
+        # Description
+        desc_text = (
+            "This project was developed by SHAIK ANEESA BEGUM as part of a Cyber Security Internship. "
+            "This project is designed to Secure the Organizations in Real World from Cyber Frauds performed by Hackers."
+        )
+        ctk.CTkLabel(
+            card, text=desc_text, font=ctk.CTkFont(size=14), text_color=self.text_color,
+            wraplength=700, justify="left"
+        ).grid(row=0, column=0, sticky="w", padx=25, pady=(25, 10))
+        
+        # Helper to create tables
+        def create_table(parent, title, data, row_start):
+            ctk.CTkLabel(
+                parent, text=title, font=ctk.CTkFont(size=18, weight="bold"), text_color="white"
+            ).grid(row=row_start, column=0, sticky="w", padx=25, pady=(20, 10))
+            
+            table_frame = ctk.CTkFrame(parent, fg_color="#16161E", corner_radius=8, border_width=1, border_color="#3B4261")
+            table_frame.grid(row=row_start+1, column=0, sticky="ew", padx=25, pady=(0, 10))
+            table_frame.grid_columnconfigure(0, weight=1)
+            table_frame.grid_columnconfigure(1, weight=2)
+            if len(data) > 0 and len(data[0]) == 3:
+                table_frame.grid_columnconfigure(2, weight=2)
+                
+            # Headers
+            headers = data[0]
+            for c, h in enumerate(headers):
+                ctk.CTkLabel(
+                    table_frame, text=h, font=ctk.CTkFont(size=13, weight="bold"), text_color="#C0CAF5", anchor="w"
+                ).grid(row=0, column=c, sticky="ew", padx=15, pady=8)
+                
+            # Rows
+            for r, row_data in enumerate(data[1:], start=1):
+                # add separator
+                ctk.CTkFrame(table_frame, height=1, fg_color="#3B4261").grid(row=r*2-1, column=0, columnspan=len(row_data), sticky="ew")
+                for c, val in enumerate(row_data):
+                    color = "#10B981" if val == "Completed" else self.text_color
+                    weight = "bold" if val == "Completed" else "normal"
+                    ctk.CTkLabel(
+                        table_frame, text=val, font=ctk.CTkFont(size=13, weight=weight), text_color=color, anchor="w"
+                    ).grid(row=r*2, column=c, sticky="ew", padx=15, pady=8)
+
+        # Project Details Table
+        proj_data = [
+            ["Project Details", "Value"],
+            ["Project Name", "Audio Steganography using LSB"],
+            ["Project Description", "Hiding Message with Encryption in Audio using LSB Algorithm"],
+            ["Project Start Date", "01-5-2026"],
+            ["Project End Date", "30-5-2026"],
+            ["Project Status", "Completed"]
+        ]
+        create_table(card, "Project Details", proj_data, 1)
+        
+        # Developer Details Table
+        dev_data = [
+            ["Name", "Roll Number", "Email"],
+            ["SHAIK ANEESA BEGUM", "ST#IS#8883", "Anonymous@gmail.com"]
+        ]
+        create_table(card, "Developer Details", dev_data, 3)
+        
+        # Company Details Table
+        comp_data = [
+            ["Company", "Value"],
+            ["Name", "Supraja Technologies"],
+            ["Email", "contact@suprajatechnologies.com"]
+        ]
+        create_table(card, "Company Details", comp_data, 5)
+
     # ------------------ Navigation & Status Helpers ------------------
     def select_tab(self, tab):
         # Reset buttons to transparent
@@ -611,12 +706,14 @@ class AudioStegoApp(ctk.CTk):
         self.btn_extract.configure(fg_color="transparent", text_color=self.text_color)
         self.btn_ml.configure(fg_color="transparent", text_color=self.text_color)
         self.btn_plots.configure(fg_color="transparent", text_color=self.text_color)
+        self.btn_info.configure(fg_color="transparent", text_color=self.text_color)
         
         # Hide all frames
         self.frame_hide.grid_forget()
         self.frame_extract.grid_forget()
         self.frame_ml.grid_forget()
         self.frame_plots.grid_forget()
+        self.frame_info.grid_forget()
         
         # Activate target
         if tab == "hide":
@@ -631,6 +728,9 @@ class AudioStegoApp(ctk.CTk):
         elif tab == "plots":
             self.btn_plots.configure(fg_color="#1E2030", text_color="white")
             self.frame_plots.grid(row=0, column=0, sticky="nsew")
+        elif tab == "info":
+            self.btn_info.configure(fg_color="#1E2030", text_color="white")
+            self.frame_info.grid(row=0, column=0, sticky="nsew")
             
     def update_status(self, message, is_error=False, is_success=False):
         color = self.text_color
@@ -1111,65 +1211,6 @@ class AudioStegoApp(ctk.CTk):
                 logger.error(f"Failed to display training plots in GUI: {e}")
                 self.lbl_ml_plot_placeholder.grid(row=0, column=0, sticky="nsew")
                 self.lbl_ml_plot_placeholder.configure(text=f"Model loaded, but could not read plot assets:\n{e}")
-
-    # ------------------ Project Info Helper -----------------------
-    def show_project_info(self):
-        html_content = """<!DOCTYPE html>
-<html>
-<head>
-<style>
-body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
-.header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eaeaea; padding-bottom: 10px; }
-.logo { font-size: 16px; font-weight: bold; color: #555; border: 1px solid #ccc; border-radius: 50%; width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; text-align: center; background-color: #fff; }
-.logo span { color: #d9534f; font-weight: 900; }
-table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px; }
-th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
-th { background-color: #f9f9f9; width: 25%; font-weight: bold; color: #000; }
-h1 { margin: 0; font-size: 28px; }
-h2 { margin-bottom: 10px; color: #222; border-bottom: 2px solid #eee; padding-bottom: 5px; font-size: 18px; margin-top: 30px; }
-strong { color: #000; }
-p { line-height: 1.6; font-size: 14px; }
-</style>
-<title>Project Information</title>
-</head>
-<body>
-<div class="header">
-    <h1>Project Information</h1>
-    <div class="logo"><span>SUPRAJA</span></div>
-</div>
-<p>This project was developed by <strong>Anonymous</strong> as part of a <strong>Cyber Security Internship</strong>. This project is designed to <strong>Secure the Organizations in Real World from Cyber Frauds performed by Hackers</strong>.</p>
-
-<h2>Project Details</h2>
-<table>
-    <tr><th>Project Details</th><th>Value</th></tr>
-    <tr><td>Project Name</td><td>Audio Steganography using LSB</td></tr>
-    <tr><td>Project Description</td><td>Hiding Message with Encryption in Audio using LSB Algorithm</td></tr>
-    <tr><td>Project Start Date</td><td>01-March-2025</td></tr>
-    <tr><td>Project End Date</td><td>01-March-2025</td></tr>
-    <tr><td>Project Status</td><td><strong>Completed</strong></td></tr>
-</table>
-
-<h2>Developer Details</h2>
-<table>
-    <tr><th>Name</th><th>Employee ID</th><th>Email</th></tr>
-    <tr><td>Anonymous</td><td>STs10#0001</td><td>Anonymous@gmail.com</td></tr>
-</table>
-
-<h2>Company Details</h2>
-<table>
-    <tr><th>Company</th><th>Value</th></tr>
-    <tr><td>Name</td><td>Supraja Technologies</td></tr>
-    <tr><td>Email</td><td>contact@suprajatechnologies.com</td></tr>
-</table>
-
-</body>
-</html>
-"""
-        fd, path = tempfile.mkstemp(suffix=".html", prefix="supraja_")
-        with os.fdopen(fd, 'w', encoding='utf-8') as f:
-            f.write(html_content)
-        webbrowser.open(f"file://{path}")
-
 
     # ------------------ Utility Clipboard Helper ------------------
     def copy_to_clipboard(self):
