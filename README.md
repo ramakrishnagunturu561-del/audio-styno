@@ -1,184 +1,73 @@
-# Audio Steganography CLI
+# SecurAudio - Secure AI Steganography Suite
 
-Audio Steganography is a technique used to hide secret messages within audio files. This project provides a command-line interface (CLI) for encoding and decoding messages in audio files using various steganography algorithms. Additionally, it provides a method to calculate the accuracy of the decoded message against the original secret message.
+SecurAudio is a cutting-edge, feature-rich desktop application designed to securely embed and extract hidden messages within audio files. This project is built using Python, `customtkinter` for a modern dark-themed user interface, and incorporates advanced Machine Learning techniques for steganalysis.
 
-## Contents
+This project was developed by **Anonymous** as part of a **Cyber Security Internship**. It is designed to **Secure the Organizations in Real World from Cyber Frauds performed by Hackers**.
 
-- **Original Audio Sample**: `input/original_sample.wav`
-- **Supported Algorithms**:
-  - Standard LSB Steganography
-  - Enhanced LSB Steganography (without flipping)
-  - Enhanced LSB Steganography (with flipping)
+## Features
 
-## Algorithms Overview
+- **Modern GUI Dashboard**: A responsive, dark-themed interface built with Tokyonight styling (Indigo/Charcoal).
+- **AES-256 Encryption**: Messages are encrypted using secure AES-256-GCM before being embedded into the audio file, providing a robust layer of security.
+- **Enhanced LSB Steganography**: Choose between Standard LSB (Sequential) and Enhanced LSB (Seeded + Randomized) steganography for better concealment.
+- **Threaded Operations**: CPU-intensive operations such as encoding, extracting, model training, and audio analysis run in the background, keeping the UI highly responsive with real-time progress bars.
+- **AI Steganalysis Hub**: Includes a Machine Learning pipeline to detect stego audio (audio with hidden text) using a trained Random Forest model. Visualize training results including Confusion Matrices and Feature Importances directly in the GUI.
+- **Audio Plotting**: Generate scientific comparison grids and signal waveforms/spectrograms for original and encoded files to visually analyze the audio differences.
+- **Email Alerts**: Automatically email the encoded stego audio file directly from the application.
+- **Project Information**: Easily generate and view a Project Information report via the built-in info button.
 
-### 1. Standard LSB Steganography
+## Requirements
 
-This algorithm hides the secret message in the least significant bits (LSB) of the audio file. It modifies the LSB of each byte in the audio data to encode the secret message. This method is simple and has minimal impact on audio quality but is relatively easy to detect.
+Ensure you have Python 3.8+ installed. Install the required dependencies using:
 
-- **Code File**: `algorithms/basic_lsb_steganography.py`
-- **Output Audio File**: `output/basic_lsb_encoded.wav`
-
-### 2. Enhanced LSB Steganography (without flipping)
-
-This algorithm improves upon the standard LSB by encoding two bits per byte without flipping them unnecessarily. It uses more sophisticated bit manipulation techniques to minimize the detectability of the encoded message while maintaining better audio quality.
-
-- **Code File**: `algorithms/enhanced_lsb_steganography_no_flip.py`
-- **Output Audio File**: `output/enhanced_lsb_encoded_no_flip.wav`
-
-### 3. Enhanced LSB Steganography (with flipping)
-
-This algorithm further enhances the LSB steganography by using flipping techniques to reduce the pattern detectability. It checks and flips bits as needed to ensure that the encoded data is less detectable and maintains high audio quality.
-
-- **Code File**: `algorithms/enhanced_lsb_steganography_with_flip.py`
-- **Output Audio File**: `output/enhanced_lsb_encoded_with_flip.wav`
-
-## Setup
-
-To run this project, ensure you have Python installed (version 3.6 or higher).
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/yourusername/audio-steganography.git
-   cd audio-steganography
-   ```
-
-2. **Install required dependencies:**
-   If there are any dependencies listed in a `requirements.txt` file, install them using pip:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Directory Structure:**
-
-   Ensure the following directory structure:
-
-   ```
-   audio-steganography/
-   ├── cli/
-   │   ├── config.py
-   │   ├── helpers.py
-   │   ├── main.py
-   │   ├── accuracy.py
-   ├── algorithms/
-   │   ├── basic_lsb_steganography.py
-   │   ├── enhanced_lsb_steganography_no_flip.py
-   │   ├── enhanced_lsb_steganography_with_flip.py
-   ├── utils/
-   │   ├── logging_util.py
-   ├── input/
-   │   ├── original_sample.wav
-   ├── output/
-   ├── README.md
-   └── requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
 ## Running the Application
 
-The application is run through a command-line interface (CLI).
+To launch the SecurAudio GUI, run the following command from the root directory of the project:
 
-### Start the CLI
+```bash
+python gui.py
+```
 
-To start the CLI, run the following command in your terminal or command prompt:
+### CLI Fallback
+
+The legacy Command-Line Interface is still available for users who prefer working in the terminal:
 
 ```bash
 python cli/main.py
 ```
 
-### Options in the CLI
+## Using SecurAudio
 
-Once the CLI is running, you will see a menu with the following options:
+### Hiding Text
+1. Navigate to the **Hide Text** tab.
+2. Select your original audio file (WAV format recommended).
+3. Enter your secret message and a strong encryption password.
+4. Select your preferred steganography method.
+5. (Optional) Enable Email alerts and enter your SMTP details.
+6. Click **Encode & Save Stego Audio** and choose where to save the output file.
 
-1. **Encode a Message**: Select this option to encode a secret message into an audio file.
-2. **Decode a Message**: Select this option to decode a secret message from an audio file.
-3. **Calculate Accuracy**: Select this option to calculate the accuracy of the decoded message compared to the original secret message.
-4. **Exit**: Exit the application.
+### Extracting Text
+1. Navigate to the **Extract Text** tab.
+2. Select the stego audio file.
+3. Enter the same password used during the encoding phase.
+4. Click **Extract & Decrypt Message**. The hidden message will be displayed and can be copied to the clipboard.
 
-### Encoding a Message
+### AI Steganalysis
+1. Navigate to the **AI Steganalysis** tab.
+2. If this is your first time using this feature, click **Train Classifier Model** to extract features and train the Random Forest model on generated normal/stego audio datasets.
+3. Once the model is trained, select an audio file and click **Run Steganalysis** to determine if the audio file contains hidden messages.
 
-1. Choose the "Encode a Message" option.
-2. Select the desired algorithm:
-   - Standard LSB Steganography
-   - Enhanced LSB Steganography (without flipping)
-   - Enhanced LSB Steganography (with flipping)
-3. Choose the input audio file (default is `original_sample.wav` or a custom file).
-4. Enter the secret message you wish to encode.
-5. The encoded audio will be saved to the output directory specified in `cli/config.py`.
+### Audio Plots
+1. Navigate to the **Audio Plots** tab.
+2. Select an original audio file, and optionally the corresponding stego audio file.
+3. Click **Generate Signal Waveforms & Spectrograms** to generate a 2x2 comparison grid of the audio waveforms and frequencies.
 
-### Decoding a Message
+## Project Details
 
-1. Choose the "Decode a Message" option.
-2. Select the desired algorithm used for encoding.
-3. Choose the input encoded audio file (default or a custom file).
-4. The decoded message will be displayed in the terminal.
-
-### Calculating Accuracy
-
-1. Choose the "Calculate Accuracy" option.
-2. Enter the original secret message used for encoding.
-3. Choose the input audio file and output audio file (press Enter to use standard files).
-4. Select the algorithm used for encoding and decoding.
-5. The accuracy of the decoded message will be calculated and displayed in the terminal.
-
-## Adding a New Algorithm
-
-To add a new algorithm to the CLI, follow these steps:
-
-1. **Create a new Python file** in the `algorithms/` directory for your new algorithm. For example, `my_new_algorithm.py`.
-
-2. **Define `encode` and `decode` functions** in your new Python file:
-   - `encode(input_file_path, output_file_path, secret_message)`: Encodes the secret message into the audio file.
-   - `decode(input_file_path)`: Decodes the secret message from the audio file and returns it.
-
-3. **Update `cli/config.py`** to include your new algorithm:
-
-   ```python
-   from algorithms import (
-       basic_lsb_steganography,
-       enhanced_lsb_steganography_no_flip,
-       enhanced_lsb_steganography_with_flip,
-       my_new_algorithm  # Import your new algorithm module
-   )
-
-   # Add your new algorithm to the ALGORITHMS dictionary
-   ALGORITHMS = {
-       1: {
-           "name": "Basic LSB Steganography",
-           "encode": basic_lsb_steganography.encode,
-           "decode": basic_lsb_steganography.decode,
-           "output_file": "output/basic_lsb_encoded.wav"
-       },
-       2: {
-           "name": "Enhanced LSB Steganography (no flip)",
-           "encode": enhanced_lsb_steganography_no_flip.encode,
-           "decode": enhanced_lsb_steganography_no_flip.decode,
-           "output_file": "output/enhanced_lsb_encoded_no_flip.wav"
-       },
-       3: {
-           "name": "Enhanced LSB Steganography (with flip)",
-           "encode": enhanced_lsb_steganography_with_flip.encode,
-           "decode": enhanced_lsb_steganography_with_flip.decode,
-           "output_file": "output/enhanced_lsb_encoded_with_flip.wav"
-       },
-       4: {
-           "name": "My New Algorithm",  # Add a descriptive name for your algorithm
-           "encode": my_new_algorithm.encode,
-           "decode": my_new_algorithm.decode,
-           "output_file": "output/my_new_algorithm_encoded.wav"
-       }
-   }
-   ```
-
-4. **Run the CLI**: Your new algorithm should now appear in the list of algorithms when encoding or decoding a message.
-
-## Contributing
-
-Feel free to contribute to this project by adding more features or improving the existing code. Follow the standard GitHub flow for contributions:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/my-new-feature`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature/my-new-feature`).
-5. Create a new Pull Request.
-
----
+- **Project Name**: Audio Steganography using LSB
+- **Project Description**: Hiding Message with Encryption in Audio using LSB Algorithm
+- **Developed by**: Anonymous
+- **Company**: Supraja Technologies
